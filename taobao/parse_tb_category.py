@@ -9,9 +9,10 @@ import os
 import sys
 import re
 import time
-import BeautifulSoup
 import urllib2
+import memcache
 import MySQLdb
+import BeautifulSoup
 from simplejson import loads, dumps
 
 def removePrefix(text, prefix):
@@ -40,21 +41,29 @@ def insert_record(conn, url, price, tradeNum, page):
 
 def main():
     conn = MySQLdb.connect(host='127.0.0.1', port=3306, db='taobao', user='root', passwd='123456')
+    mc = memcache.Client(["127.0.0.1:11211"], debug=1)
+    key = "pagenum"
+
     if len(sys.argv) >= 2:
         category_id = sys.argv[1]
-        total_price = 0
-        for pagenum in xrange(1, 101):
-			print pagenum
-			url = get_category_url(category_id, int(pagenum))
-			page_content = get_itemlist(url)
+        if mc.get(key):
+        	if (mc.get(Key)>1 and mc.get(key)<100):
+        		start_page = mc.get(key)
+        	else:
+				start_page = 1
+	        for pagenum in xrange(start_page, 101):
+				print pagenum
+				mc.set(key, pagenum)
+				url = get_category_url(category_id, int(pagenum))
+				page_content = get_itemlist(url)
 
-			for item in page_content.get('itemList'):
-				url = item.get('href')
-				price = float(item.get('currentPrice')) * 100
-				# print item.get('title')
-				tradeNum = item.get('tradeNum')
-				insert_record(conn, url, price, tradeNum, pagenum)
-			time.sleep(15)
+				for item in page_content.get('itemList'):
+					url = item.get('href')
+					price = float(item.get('currentPrice')) * 100
+					# print item.get('title')
+					tradeNum = item.get('tradeNum')
+					insert_record(conn, url, price, tradeNum, pagenum)
+				time.sleep(3)
 	else:
 		print "No taobao category_id provided!"
 		sys.exit(1)
