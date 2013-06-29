@@ -1,5 +1,5 @@
 " 设置菜单语言
-set langmenu=zh_cn
+set langmenu=zh_cn 
 
 " ==============
 " 功能函数  
