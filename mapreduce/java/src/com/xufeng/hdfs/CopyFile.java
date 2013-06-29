@@ -5,7 +5,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 /**
- * 上传文件到HDFS( 通过 FileSystem.copyFromLocalFile(Path src, Path dst) )
+ * 上传文件到HDFS ( 通过 FileSystem.copyFromLocalFile(Path src, Path dst) )
  * @author xufeng
  */
 public class CopyFile {
