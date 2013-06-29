@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 # author: richardxu
 # time: 2013-06-17
-# purpose: 解析淘宝类目页面, 得到近一月的销量
+# purpose: 解析淘宝类目页面, 得到最近一月的销量, 并入库
 # usage: python parse_tb_category.py $category_id, eg: python parse_tb_category.py 50049375
 
 import os
