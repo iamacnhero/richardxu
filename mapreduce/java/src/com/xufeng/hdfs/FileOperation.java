@@ -15,8 +15,8 @@ public class FileOperation  {
 	}
 	
     public void createFile(String fileNameWithPath) throws IOException {
-    	Path dfs = new Path(fileNameWithPath);
-		FSDataOutputStream outputStream = hdfs.create(dfs);
+    	Path file = new Path(fileNameWithPath);
+		FSDataOutputStream outputStream = hdfs.create(file);
 		outputStream.close();
     }
     

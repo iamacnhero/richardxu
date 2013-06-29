@@ -11,10 +11,10 @@ public class CreateFile {
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
 		FileSystem hdfs = FileSystem.get(conf);
-		Path dfs = new Path("/tmp/xufeng/test3.txt");
-//		String text = "test";
-		FSDataOutputStream outputStream = hdfs.create(dfs);
-//		outputStream.writeUTF(text);
+		Path file = new Path("/tmp/xufeng/test3.txt");
+		String text = "test";
+		FSDataOutputStream outputStream = hdfs.create(file);
+		outputStream.writeUTF(text);
 		outputStream.close();
 	}
 }
