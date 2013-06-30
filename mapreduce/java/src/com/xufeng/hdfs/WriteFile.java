@@ -26,5 +26,7 @@ public class WriteFile {
 			bw.newLine();
 		}
 		bw.close();
+		
+		
 	}
 }
