@@ -204,8 +204,11 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
-	 /**
+    /**
      * 计算2个日期相隔的天数
+     * @param d1
+     * @param d2
+     * @return
      */
     public static long differDay(Date d1, Date d2) {
         int betweenDays = 0;
@@ -229,16 +232,42 @@ public class DateUtils {
         return Math.abs(betweenDays);
     }
     
+    /**
+     * 计算两个日期相隔的小时
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public static long differHour(Date startDate, Date endDate) {
+    	long time = endDate.getTime() - startDate.getTime(); 
+    	return time / (60 * 60 * 1000);
+    }
+    
+    /**
+     * 计算某日期与当前日期相隔的小时
+     * @param fromDate
+     * @return
+     */
+    public static long differHourWithCurrentTime(Date fromDate) {
+    	long time = new Date().getTime() - fromDate.getTime();
+    	return time / (60 * 60 * 1000);
+    }
+    
+    /**
+     * 得到当天日期
+     * @return
+     */
     public static String getToday() {
     	Date d = getCurrentDateTime();
     	return convertDateToString(d, DATE_PATTERN_YYYY_MM_DD);
     }
     
     public static void main(String[] args) {
-    	System.out.println(DateUtils.convertDateToString(DateUtils.getDayBeforeOrAfter(new Date(), 2)));
-		System.out.println(DateUtils.convertDateToString(DateUtils.getDayBeforeOrAfter2(new Date(), 2)));
+    	System.out.println(DateUtils.convertDateToString(DateUtils.getDayBeforeOrAfter(new Date(), -7)));
+		System.out.println(DateUtils.convertDateToString(DateUtils.getDayBeforeOrAfter2(new Date(), -7)));
 		System.out.println(DateUtils.getYear(new Date()));
 		System.out.println(DateUtils.getMonth(new Date()));
 		System.out.println(DateUtils.getDate(new Date()));
+		System.out.println(getToday());
 	}
 }

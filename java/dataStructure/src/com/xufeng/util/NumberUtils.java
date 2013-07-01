@@ -49,5 +49,36 @@ class NumberUtil {
 			sb.append((char) ('0' + rnd.nextInt(10)));
 		return sb.toString();
 	}
+	
+	/**
+	 * 求两个整数的最大公约数 - 欧几里德算法
+	 * @author xufeng
+	 * @param m
+	 * @param n
+	 * @return
+	 */
+	public static long gcd(long m, long n) {
+		while (n != 0) {
+			long rem = m % n;
+			m = n;
+			n = rem;
+		}
+		return m;
+	}
+	
+	/**
+	 * 求对数, 算法是对数方程: logx(y) = loge(x) / loge(y)
+	 * @param value
+	 * @param base
+	 * @return
+	 */
+	public static double log (double value, int base) {
+		return Math.log(value) / Math.log(base);
+	}
 
+	public static void main(String[] args) {
+		System.out.println(gcd(50, 15));
+		
+		System.out.println(log(8, 2));	// 求log2(8)
+	}
 }
