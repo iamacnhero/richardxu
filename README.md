@@ -7,6 +7,7 @@ Richardxu's Github
 * mapreduce: MapReduce相关最佳实践
 * python: Python 相关开发实践常用库
 * taobao: 与淘宝相关的库或应用
+* test
 
 
 email & gtalk: iamacnhero#gmail.com
