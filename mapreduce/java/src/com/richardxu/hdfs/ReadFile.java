@@ -1,4 +1,4 @@
-package com.xufeng.hdfs;
+package com.richardxu.hdfs;
 
 import java.io.BufferedReader;
 import java.io.IOException;

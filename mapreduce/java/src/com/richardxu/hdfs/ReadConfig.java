@@ -1,8 +1,13 @@
-package com.xufeng.hdfs;
+package com.richardxu.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
 import java.util.Map.Entry;
 
+/**
+ * 读取配置文件
+ * @author xufeng
+ *
+ */
 public class ReadConfig {
 	public static void main(String[] args) {
 		Configuration conf = new Configuration();
