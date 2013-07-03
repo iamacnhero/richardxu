@@ -1,0 +1,17 @@
+#parse("./website/inc/header.vm")    
+<div id="container" class="clearfix">
+    <div class="page-bd clearfix">
+        <div class="main">
+            #foreach ($user in $userList)
+                $velocityCount.<br />
+                name: $user.name<br />
+                age: $user.age<br />
+                phone: $user.phone<br /><br />
+            #end
+        </div><!--main end-->
+    </div>
+    <!--page-bd end--> 
+</div>
+
+</body>
+</html>

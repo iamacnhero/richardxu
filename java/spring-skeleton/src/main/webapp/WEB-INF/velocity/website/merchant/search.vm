@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="author" content="xufeng" />
+<title>商户数据查询</title>
+<!-- CSS -->
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-responsive.min.css">
+<style type="text/css">
+    body {
+        padding-top: 50px;
+        padding-bottom: 40px;
+    }
+    .sidebar-nav {
+        padding: 9px 0;
+    }
+    footer {
+        margin-top: 10px;
+        margin-bottom: 60px;
+        text-align: center;
+    }
+    .span1 {
+        margin-top: 20px;
+    }
+</style>
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+</head>
+<body>
+    <form id="J_MerchantForm" method="post" action="$!request.getContextPath()/search">
+        #if($!nickname)
+            输入商家旺旺：<input type="text" name="nickname" value="$nickname" />
+        #else
+            输入商家旺旺：<input type="text" name="nickname" value="" />
+        #end
+        <input type="submit" value="查  询" />
+    </form>
+
+    #if ($!merchant.id)
+        <ul>
+            <li>旺旺: $merchant.nickname</li>
+            <li>省: 
+                #if ("$merchant.province" != "None")
+                    $merchant.province 
+                #else
+                    无
+                #end
+            </li>
+            <li>市: 
+                #if ("$merchant.city" != "None")
+                    $merchant.province
+                #else
+                    无
+                #end
+            </li>
+            <li>固话: 
+                #if ("$merchant.phone" != "None")
+                    $merchant.province
+                #else
+                    无
+                #end
+            </li>
+            <li>Email: $merchant.email</li>
+            <!-- li>$merchant.idcard</li -->
+            <li>手机: $merchant.cellphone</li>
+            <li>卖家信誉: $merchant.sellerCredit</li>
+            <li>卖家等级: $vipLevel</li>
+            <li>注册类目: $registerCid</li>
+            <li>店铺名称: $merchant.shopName</li>
+            <li>核心经营类目: $coreBusinessCid</li>
+            <li>性别: 
+                #if ("$merchant.gender" == 0)
+                    女
+                #else
+                    男
+                #end
+            </li>
+            <li>出生年月: 
+                #if ("$merchant.birth" != "None")
+                    $merchant.birth 
+                #else
+                    无
+                #end
+            </li>
+        </ul>
+    #else
+         $message
+    #end
+    	
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+
+</body>
+</html>

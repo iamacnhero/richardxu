@@ -1,0 +1,50 @@
+#set($menu="reg")
+#set($banner="user")
+#parse("./website/inc/header.vm")   
+<div id="container">
+    <div class="content">
+        <h2>注册</h2>
+        <div class="form">          
+            <div class="error-row-l" #if("$!message" != "") style="display:block" #end><p class="error">$!message</p></div>
+            <fieldset class="reg">
+                <legend>
+                    2.免费注册一个“逛”帐号：
+                </legend>
+                <span class="top-r">已有帐号？<a href="$!request.getContextPath()/user/login">直接登录</a></span>
+                <div class="field-box pt25 pl20">
+                <form id="regForm" method="post" action="$!request.getContextPath()/user/doRegist">
+                    <div class="form-row">
+                        <label>用户名：</label>
+                        <input type="text" class="base-input" name="name" value="" placeholder="用户名" />
+                    </div>
+                    <div class="form-row">
+                        <label>密码：</label>
+                        <input type="text" class="base-input" name="passwd" value="" placeholder="密码" />
+                    </div>
+                    <div class="form-row">
+                        <label>年龄：</label>
+                        <input type="text" class="base-input" name="age" value="" placeholder="年龄" />
+                    </div>
+                    <div class="form-row">
+                        <label>手机：</label>
+                        <input type="text" class="base-input" name="phone" value="" placeholder="年龄" />
+                    </div>
+                    <div class="form-row pt10 clearfix">
+                        <label>&nbsp;</label>
+                        <input type="submit" class="bbl-btn submit" value="注册" />
+                    </div>
+                    <div class="form-row">
+                        <label>&nbsp;</label>
+                        <input type="checkbox" class="check" name="remember" value="1" checked="checked" />
+                        <span class="agreement gc6">我已阅读并同意<a href="$!request.getContextPath()/agreement" target="_blank">《使用协议》</a></span>
+                    </div>
+                </form>
+                </div>
+            </fieldset>
+            
+        </div>      
+    </div>
+</div>  
+
+</body>
+</html>

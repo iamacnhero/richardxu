@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!-- 定义mysql-connector.jar -->
+    <classPathEntry location="/Users/xufeng/DEV/libs/mysql-connector-java-5.1.6.jar" />
+    <context id="context1" targetRuntime="MyBatis3">
+        
+        <!-- 去除自动生成的注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="false" />
+        </commentGenerator>
+        
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1/merchant?characterEncoding=utf-8"
+            userId="xuf" password="123456" />
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        
+        <!-- Model 的生成配置 -->
+        <javaModelGenerator targetPackage="com.richardxu..merchant.domain" targetProject="merchant" />
+        
+        <!-- XML 的生成配置 -->
+        <sqlMapGenerator targetPackage="com.richardxu.merchant.map" targetProject="merchant" />
+        
+        <!-- Mapper 的生成配置 -->
+        <javaClientGenerator targetPackage="com.richardxu.merchant.dao" targetProject="merchant" type="XMLMAPPER" />
+        
+<!--         <table schema="User" tableName="user" />
+        <table schema="Merchant" tableName="merchant" /> -->
+        <!-- <table schema="Category" tableName="category" /> -->
+        <table schema="vipLevel" tableName="vip_level" />
+    </context>
+</generatorConfiguration>
