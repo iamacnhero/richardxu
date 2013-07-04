@@ -47,7 +47,7 @@ def get_vip_level(content):
 def get_shop_info_by_name(shop_name):
 	url = 'http://shopsearch.taobao.com/search?q=%s&rele_field=wangwang&fs=1' % shop_name.encode('utf8')
 	req = urllib2.Request(url)
-	req.add_header("http://www.taobao.com")
+	req.add_header("Referer", "http://www.taobao.com")
 	content = urllib2.urlopen(req).read()
 	soup = BeautifulSoup(content.decode('gbk'))
 	result_shop_num = soup.find("span", {"class": "shop-count"}).find('b').text	# 搜索到的相关店铺数量
