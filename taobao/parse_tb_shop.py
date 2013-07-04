@@ -20,7 +20,7 @@ def process_sign(i):
 
 def get_shop_list(conn):
 	cursor = conn.cursor()
-	query = "SELECT id, name FROM shop WHERE id >= 282"
+	query = "SELECT id, name FROM shop"
 	cursor.execute(query)
 	return cursor.fetchall()
 
