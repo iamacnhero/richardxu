@@ -6,6 +6,7 @@
 # clean data first: UPDATE shop SET `type`=NULL, `url`=NULL, `vip_level`=NULL, `description_rate`=NULL, `service_attitude`=NULL, `deliver_speed`=NULL, `month_sales`=NULL;
 
 import re
+import time
 import urllib2
 import MySQLdb
 from simplejson import loads
@@ -83,6 +84,7 @@ def main():
 		if shop_info:
 			shop_type, url, vip_level, description_rate, service_attitude, deliver_speed, month_sales = get_shop_info_by_name(name)
 			update_shop_info(conn, shop_type, url, vip_level, description_rate, service_attitude, deliver_speed, month_sales, id)
+		time.sleep(1)
 	
 if __name__ == '__main__':
 	main()
