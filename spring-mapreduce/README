@@ -1,13 +1,8 @@
-RUNNING THE APPLICATION
-- Install Java (http://java.sun.com)
-- Download and install Maven 3 (http://maven.apache.org/download.html#Installation). If you
-  have already installed Maven 3, you can skip this step.
-- Install Apache Hadoop and Configure it to run in pseudo-distributed model.
-- Go to the root directory of project (The one which contains the pom.xml file)
-- Create the input directory to HDFS and move the files found from etc directory to that directory.
-- Configure the input and output directories found from application.properties file.
-- Run command mvn clean assembly:assembly(or mvn -Dmaven.test.skip=true assembly:assembly, skip test)
-- Go to the target directory
-- Unzip the mapreduce-bin.zip to the preferred directory
-- Go to that directory
-- Run the startup script (startup.sh)
+程序运行，需要具备:
+- Maven 3 (http://maven.apache.org/download.html#Installation).
+- Apache Hadoop 环境.
+- 在 application.properties 中配置输入输出目录，并上传一个nginx日志文件到输入目录.
+- 运行 mvn clean assembly:assembly(or mvn -Dmaven.test.skip=true assembly:assembly, skip test)
+- 目标程序生成在 target 目录
+- Unzip mapreduce-bin.zip 到Hadoop服务器
+- 运行脚本 (startup.sh)
