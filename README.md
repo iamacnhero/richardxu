@@ -6,6 +6,7 @@ Richardxu's Github
 * java: Java 相关开发实践及常用库
 * mapreduce: MapReduce相关最佳实践
 * python: Python 相关开发实践常用库
+* spring-mapreduce: 基于Spring Hadoop的最佳实践
 * taobao: 与淘宝相关的库或应用
 
 email & gtalk: iamacnhero#gmail.com
