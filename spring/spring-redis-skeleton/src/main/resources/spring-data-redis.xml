@@ -44,36 +44,6 @@
         class="org.springframework.data.redis.cache.RedisCacheManager"
         c:template-ref="redisTemplate"/>    	
 
-	<bean id="listOperations" class="org.springframework.data.redis.core.DefaultListOperations">
-        <constructor-arg>
-            <ref bean="redisTemplate" />
-        </constructor-arg>
-    </bean>
-
-    <bean id="valueOperations" class="org.springframework.data.redis.core.DefaultValueOperations">
-        <constructor-arg>
-            <ref bean="redisTemplate" />
-        </constructor-arg>
-    </bean>
-
-    <bean id="setOperations" class="org.springframework.data.redis.core.DefaultSetOperations">
-        <constructor-arg>
-            <ref bean="redisTemplate" />
-        </constructor-arg>
-    </bean>
-
-    <bean id="zSetOperations" class="org.springframework.data.redis.core.DefaultZSetOperations">
-        <constructor-arg>
-            <ref bean="redisTemplate" />
-        </constructor-arg>
-    </bean>
-
-    <bean id="hashOperations" class="org.springframework.data.redis.core.DefaultHashOperations">
-        <constructor-arg>
-            <ref bean="redisTemplate" />
-        </constructor-arg>
-    </bean>
-    	
     <!-- 使用 RedisTemplate 初始化数据，可以通过注解完成 -->
 	<!-- <bean id="initRedisService" class="com.richardxu.service.InitRedisService" init-method="init"/> -->
 </beans>
