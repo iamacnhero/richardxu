@@ -4,13 +4,10 @@ package com.richardxu.lib;
  * Test client for StdIn and In. 
  **/
 
-import java.util.Scanner;
-import java.util.Arrays;
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.io.ByteArrayInputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.util.Scanner;
 
 public class StdInTest {
     
