@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 
+/**
+ * @author xufeng
+ * @date 2014-7-10 下午11:36:33
+ *
+ */
 public class ListUtils {
     
     /**
