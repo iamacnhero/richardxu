@@ -1,17 +1,32 @@
 package com.richardxu.utils;
 
+import com.richardxu.datastructure.Bag;
+import com.richardxu.lib.StdIn;
 import com.richardxu.lib.StdOut;
-import com.richardxu.lib.StdRandom;
-import com.richardxu.lib.VisualAccumulator;
 
 public class Test {
     
     public static void main(String[] args) {
-        int T = Integer.parseInt("2000");
-        VisualAccumulator a = new VisualAccumulator(T, 1.0);
-        for (int i = 0; i < T; i++) {
-            a.addDataValue(StdRandom.random());
+        Bag<Double> numbers = new Bag<Double>();
+        while (!StdIn.isEmpty()) {
+            double item = StdIn.readDouble();
+            if (((int) item) == 0000)
+                break;
+            numbers.add(StdIn.readDouble());
         }
-        StdOut.println(a);
+        int len = numbers.size();
+        double sum = 0.0;
+        for (Double d : numbers) {
+            sum += d;
+        }
+        double mean = sum / len;
+        System.out.printf("Mean: %.2f\n", mean);
+        
+        sum = 0.0;
+        for (Double d : numbers) {
+            sum += (d - mean) * (d - mean);
+        }
+        double std = Math.sqrt(sum / (len - 1));
+        System.out.printf("Std dev: %.2f", std);
     }
 }
