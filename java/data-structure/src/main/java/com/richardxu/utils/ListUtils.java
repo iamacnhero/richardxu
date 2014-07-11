@@ -33,8 +33,7 @@ public class ListUtils {
      */
     public static <T> List<T> reverse(List<T> lists) {
         int len = lists.size();
-        int middle = len / 2;
-        for (int i = 0; i < middle; i++) {
+        for (int i = 0; i < len / 2; i++) {
             T temp = lists.get(len - i - 1);
             lists.set(len - i - 1, lists.get(i));
             lists.set(i, temp);
