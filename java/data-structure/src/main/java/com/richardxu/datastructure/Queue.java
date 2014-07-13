@@ -114,19 +114,19 @@ public class Queue<E> implements Iterable<E> {
     }
     
     // an iterator, doesn't implement remove() since it's optional
-    private class ListIterator<EE> implements Iterator<EE> {
-        private Node<EE> current;
+    private class ListIterator<Item> implements Iterator<Item> {
+        private Node<Item> current;
         
-        public ListIterator(Node<EE> first) {
+        public ListIterator(Node<Item> first) {
             current = first;
         }
         
         public boolean hasNext() { return current != null; }
         public void remove() { throw new UnsupportedOperationException(); }
         
-        public EE next() {
+        public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            EE item = current.item;
+            Item item = current.item;
             current = current.next;
             return item;
         }

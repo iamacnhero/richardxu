@@ -72,19 +72,19 @@ public class Bag<E> implements Iterable<E> {
     }
     
     // an iterator, doesn't implement remove() since it's optional
-    private class ListIterator<T> implements Iterator<T> {
-        private Node<T> current;
+    private class ListIterator<Item> implements Iterator<Item> {
+        private Node<Item> current;
         
-        public ListIterator(Node<T> first) {
+        public ListIterator(Node<Item> first) {
             current = first;
         }
         
         public boolean hasNext() { return current != null; }
         public void remove() { throw new UnsupportedOperationException(); }
         
-        public T next() {
+        public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            T item = current.item;
+            Item item = current.item;
             current = current.next;
             return item;
         }
