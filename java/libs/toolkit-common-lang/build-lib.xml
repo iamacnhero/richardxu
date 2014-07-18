@@ -1,0 +1,360 @@
+<!-- 统一复用库构建脚本 -->
+
+<project xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property environment="env" />
+	<property name="module.home" value="." />
+	<property name="module.name" value="toolkit-common-lang" />
+	<property name="module.version" value="1.1.0" />
+	<property name="module.main.src" value="${module.home}/src/main/java" />
+	<property name="module.main.resources" value="${module.home}/src/main/resources" />
+	<property name="module.test.src" value="${module.home}/src/test/java" />
+	<property name="module.test.resources" value="${module.home}/src/test/resources" />
+	<property name="module.target" value="${module.home}/target" />
+	<property name="module.test.report" value="${module.target}/report/junit" />
+	<property name="dist.bin" value="${module.target}/bin" />
+	<property name="compile.debug" value="on" />
+	<property name="compile.deprecation" value="false" />
+	<property name="compile.optimize" value="false" />
+	<property name="compile.encoding" value="UTF-8" />
+	<property name="compile.source" value="1.6" />
+	<property name="compile.target" value="1.6" />
+	<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+
+	<property name="module.test.coverage" value="${module.target}/report/coverage" />
+	<property name="bin.instrument.dir" location="${module.test.coverage}/instrbin" />
+
+	<ivy:settings url="http://localhost:8080/devconf/ivysettings.xml" />
+
+	<target name="ivy-clean" description="--> clean ivy cache">
+		<ivy:cleancache />
+	</target>
+
+	<target name="resolve" description="--> retreive dependencies with ivy">
+		<ivy:retrieve pattern="${module.target}/lib/[conf]/[artifact]-[revision]-[type].[ext]" conf="compile,test,runtime" type="jar,bundle" />
+	</target>
+
+	<target name="ivy-report" depends="resolve" description="--> generates a report of dependencies">
+		<ivy:report todir="${module.target}/ivyreport" />
+	</target>
+
+	<tstamp prefix="build.">
+		<format property="timeStamp" pattern="yyyyMMdd-HHmmss" />
+	</tstamp>
+
+	<path id="compile.classpath">
+		<path location="${module.target}/src/classes" />
+		<path location="${module.target}/test/classes" />
+	</path>
+
+	<path id="test.classpath">
+		<path location="${module.target}/src/classes" />
+		<path location="${module.target}/test/classes" />
+		<fileset dir="${module.target}/lib/test">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="usage" description="显示可选任务">
+		<echo message="Build 文件" />
+		<echo message="------------------------------------------------------" />
+		<echo message="" />
+		<echo message="可选Target:" />
+		<echo message="" />
+		<echo message="ivy-clean          	--&gt; 清理ivy缓存" />
+		<echo message="resolve          --&gt; 获取ivy依赖" />
+		<echo message="ivy-report          	--&gt; 生成ivy报告" />
+		<echo message="clean          		--&gt; 清理" />
+		<echo message="init          		--&gt; 初始化" />
+		<echo message="compile       		--&gt; 编译源代码" />
+		<echo message="test		       		--&gt; 运行测试" />
+		<echo message="jar				    --&gt; 源程序打包" />
+		<echo message="jar-test				--&gt; 测试程序打包" />
+		<echo message="source-jar		    --&gt; 源代码打包为jar文件" />
+		<echo message="doc-jar		    	--&gt; javadoc打包为jar文件" />
+		<echo message="publish-snapshot   	--&gt; 发布jar至sanpshot仓库" />
+		<echo message="publish-release    	--&gt; 发布jar至release仓库" />
+		<echo message="" />
+		<input message="请选择一个Target " validargs="ivy-clean,resolve,ivy-report,clean,init,compile,test,jar,source-jar,jar-test,doc-jar,publish-release,publish" addproperty="ant.task" />
+		<antcall target="${ant.task}" />
+	</target>
+
+	<target name="clean">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${module.target}">
+				<exclude name=".svn" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!--初始化目录 -->
+	<target name="init" depends="clean">
+		<echo>+---------------------------------------------------+</echo>
+		<echo>| |</echo>
+		<echo>| B U I L D I N G ${module.name} |</echo>
+		<echo>| |</echo>
+		<echo>+---------------------------------------------------+</echo>
+		<mkdir dir="${module.target}/src/classes" />
+		<mkdir dir="${module.target}/test/classes" />
+		<mkdir dir="${module.target}/source" />
+		<mkdir dir="${module.target}/resource" />
+		<mkdir dir="${module.target}/docs" />
+		<mkdir dir="${module.test.report}" />
+	</target>
+
+	<target name="hudson-dist-revision" if="env.SVN_REVISION">
+		<property name="dist.revision" value="${env.SVN_REVISION}" />
+	</target>
+
+	<target name="default-dist-revision" unless="env.SVN_REVISION">
+		<property name="dist.revision" value="unformal" />
+	</target>
+
+	<target name="hudson-dist-build-number" if="env.BUILD_NUMBER">
+		<property name="dist.build.number" value="${env.BUILD_NUMBER}" />
+	</target>
+
+	<target name="default-dist-build-number" unless="env.BUILD_NUMBER">
+		<property name="dist.build.number" value="unknown" />
+	</target>
+
+	<target name="hudson-dist-build-id" if="env.BUILD_ID">
+		<property name="dist.build.id" value="${env.BUILD_ID}" />
+	</target>
+
+	<target name="default-dist-build-id" unless="env.BUILD_ID">
+		<property name="dist.build.id" value="${build.timeStamp}" />
+	</target>
+
+	<target name="prepare-dep" depends="hudson-dist-revision
+	                ,default-dist-revision
+	                ,hudson-dist-build-number
+	                ,default-dist-build-number
+	                ,hudson-dist-build-id
+	                ,default-dist-build-id
+	    	">
+	</target>
+
+	<!--执行编译JAVA文件 -->
+	<target name="compile" depends="init, prepare-dep, resolve">
+		<echo>编译源代码并拷贝资源文件</echo>
+		<javac srcdir="${module.main.src}" destdir="${module.target}/src/classes" target="${compile.target}" source="${compile.source}" debug="${compile.debug}" encoding="${compile.encoding}" failonerror="true" includeAntRuntime="false">
+			<classpath refid="compile.classpath" />
+		</javac>
+
+		<copy todir="${module.target}/src/classes">
+			<fileset dir="${module.main.resources}">
+				<include name="**/*.*" />
+				<exclude name="**/*.properties" />
+				<exclude name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="compile-test" depends="compile">
+		<echo>编译测试类源代码并拷贝资源文件</echo>
+
+		<javac srcdir="${module.test.src}" destdir="${module.target}/test/classes" target="${compile.target}" source="${compile.source}" debug="${compile.debug}" encoding="${compile.encoding}" failonerror="false" includeAntRuntime="false">
+			<classpath refid="test.classpath" />
+		</javac>
+		<copy todir="${module.target}/test/classes">
+			<fileset dir="${module.test.resources}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<path id="emma.classpath">
+		<fileset dir="${env.ANT_HOME}/lib">
+			<include name="**/emma*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="emma_ant.properties" classpathref="emma.classpath" />
+
+	<target name="instrument">
+		<delete dir="${module.test.coverage}" failonerror="false" />
+		<mkdir dir="${bin.instrument.dir}" />
+		<mkdir dir="${module.test.coverage}" />
+
+		<emma enabled="true">
+			<instr instrpath="${module.target}/src/classes" destdir="${bin.instrument.dir}" metadatafile="${module.test.coverage}/metadata.emma" merge="true" />
+		</emma>
+
+		<copy todir="${bin.instrument.dir}">
+			<fileset dir="${module.main.src}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="test" depends="compile,compile-test,instrument">
+		<delete dir="${module.test.report}" failonerror="false" />
+		<mkdir dir="${module.test.report}" />
+		<mkdir dir="${module.test.report}/data" />
+		<junit printsummary="yes" haltonfailure="yes" errorproperty="test.error" showoutput="yes">
+			<sysproperty key="emma.coverage.out.file" value="${module.test.coverage}/metadata.emma" />
+			<classpath>
+				<pathelement location="${bin.instrument.dir}" />
+			</classpath>
+			<classpath refid="test.classpath" />
+			<classpath refid="emma.classpath" />
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${module.test.report}/data">
+				<fileset dir="${module.test.src}">
+					<include name="**/*Test.java" />
+					<include name="**/*TestCase.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${module.test.report}">
+			<fileset dir="${module.test.report}/data">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${module.test.report}" />
+		</junitreport>
+		<echo>
+			################################################################################
+			# View JUnit report at ${module.test.report}/index.html
+			################################################################################
+		</echo>
+
+		<emma enabled="true">
+			<report sourcepath="${module.main.src}" sort="+block,+name,+method,+class" metrics="method:70,block:80,line:80,class:100">
+				<fileset dir="${module.test.coverage}">
+					<include name="*.emma" />
+				</fileset>
+				<html outfile="${module.test.coverage}/coverage.html" depth="method" columns="name,class,method,block,line" />
+				<xml outfile="${module.test.coverage}/coverage.xml" />
+			</report>
+		</emma>
+		<echo>
+			################################################################################
+			# View Coverage report at ${module.test.coverage}/coverage.html
+			################################################################################
+		</echo>
+	</target>
+
+	<target name="jar" depends="compile">
+		<property name="module.jar.filename" value="${module.name}-${module.version}-${build.timeStamp}.jar" />
+
+		<jar destfile="${module.target}/${module.jar.filename}">
+			<fileset dir="${module.target}/src/classes">
+				<exclude name="**/*.xml" />
+				<exclude name="**/*.properties" />
+			</fileset>
+			<fileset dir="${module.main.resources}">
+				<include name="**/*.xml" />
+			</fileset>
+
+			<manifest>
+				<attribute name="Specification-Title" value="${module.name}" />
+				<attribute name="Specification-Version" value="${module.version}" />
+				<attribute name="Implementation-Title" value="${module.name}" />
+				<attribute name="Implementation-Version" value="${module.version}-${dist.build.number}-${dist.build.id}-[${dist.revision}]" />
+				<attribute name="Specification-Vendor" value="SAGA TECHNOLOGIES CO.,LTD" />
+				<attribute name="Implementation-Vendor" value="SAGA TECHNOLOGIES CO.,LTD" />
+			</manifest>
+		</jar>
+		<copy todir="${module.target}/resource">
+			<fileset dir="${module.main.resources}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="jar-test" depends="jar,compile-test,test">
+		<property name="module.jar.test.filename" value="${module.name}-test-${module.version}-${build.timeStamp}.jar" />
+
+		<jar destfile="${module.target}/${module.jar.test.filename}">
+			<fileset dir="${module.target}/test/classes">
+				<exclude name="**/*.xml" />
+				<exclude name="**/*.properties" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="source-jar" depends="compile">
+		<property name="module.srcjar.filename" value="${module.name}-${module.version}-${build.timeStamp}-source.jar" />
+
+		<copy todir="${module.target}/source">
+			<fileset dir="${module.main.src}">
+			</fileset>
+		</copy>
+		<copy todir="${module.target}/source">
+			<fileset dir="${module.main.resources}">
+			</fileset>
+		</copy>
+		<jar basedir="${module.target}/source" destfile="${module.target}/${module.srcjar.filename}">
+			<manifest>
+				<attribute name="Specification-Title" value="${module.name}" />
+				<attribute name="Specification-Version" value="${module.version}" />
+				<attribute name="Implementation-Title" value="${module.name}" />
+				<attribute name="Implementation-Version" value="${module.version}-${dist.build.number}-${dist.build.id}-[${dist.revision}]" />
+				<attribute name="Specification-Vendor" value="SAGA TECHNOLOGIES CO.,LTD" />
+				<attribute name="Implementation-Vendor" value="SAGA TECHNOLOGIES CO.,LTD" />
+			</manifest>
+		</jar>
+
+	</target>
+
+	<target name="doc-jar" depends="jar">
+		<property name="module.docjar.filename" value="${module.name}-${module.version}-${build.timeStamp}-doc.jar" />
+
+		<javadoc sourcepath="${module.main.src}" destdir="${module.target}/docs" author="true" version="true" use="true" encoding="UTF-8" charset="UTF-8" private="true">
+			<classpath refid="compile.classpath" />
+			<doclet name="org.jboss.apiviz.APIviz" path="${ant.library.dir}/apiviz-1.3.1.GA.jar" />
+		</javadoc>
+
+		<jar basedir="${module.target}/docs" destfile="${module.target}/${module.docjar.filename}">
+			<manifest>
+				<attribute name="Specification-Title" value="${module.name}" />
+				<attribute name="Specification-Version" value="${module.version}" />
+				<attribute name="Implementation-Title" value="${module.name}" />
+				<attribute name="Implementation-Version" value="${module.version}-${dist.build.number}-${dist.build.id}-[${dist.revision}]" />
+				<attribute name="Specification-Vendor" value="SAGA TECHNOLOGIES CO.,LTD" />
+				<attribute name="Implementation-Vendor" value="SAGA TECHNOLOGIES CO.,LTD" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="publish-release" depends="jar,source-jar,doc-jar" description="--> publish this project in the ivy repository">
+		<property name="release.dir" value="${module.target}/release" />
+		<copy tofile="${release.dir}/${module.name}-${module.version}-jar.jar" file="${module.target}/${module.jar.filename}" overwrite="true" />
+		<copy tofile="${release.dir}/${module.name}-${module.version}.jar" file="${module.target}/${module.jar.filename}" overwrite="true" />
+		<copy tofile="${release.dir}/${module.name}-${module.version}-source.jar" file="${module.target}/${module.srcjar.filename}" overwrite="true" />
+		<copy tofile="${release.dir}/${module.name}-${module.version}-sources.jar" file="${module.target}/${module.srcjar.filename}" overwrite="true" />
+		<copy tofile="${release.dir}/${module.name}-${module.version}-javadoc.jar" file="${module.target}/${module.docjar.filename}" overwrite="true" />
+		<ivy:deliver pubrevision="${module.version}" status="release" deliverpattern="${release.dir}/ivy.xml" />
+		<ivy:makepom ivyfile="${release.dir}/ivy.xml" pomfile="${release.dir}/${module.name}-${module.version}.pom" />
+		<ivy:publish resolver="share-release" artifactspattern="${release.dir}/[artifact]-[revision](-[type]).[ext]" srcivypattern="${release.dir}/ivy.xml" pubrevision="${module.version}" update="true" overwrite="true" status="release" />
+	</target>
+
+	<target name="publish-snapshot" depends="jar,source-jar,doc-jar" description="--> publish this project in the ivy repository">
+		<property name="snapshot.dir" value="${module.target}/snapshot" />
+		<copy tofile="${snapshot.dir}/${module.name}-${module.version}-jar.jar" file="${module.target}/${module.jar.filename}" overwrite="true" />
+		<copy tofile="${snapshot.dir}/${module.name}-${module.version}.jar" file="${module.target}/${module.jar.filename}" overwrite="true" />
+		<copy tofile="${snapshot.dir}/${module.name}-${module.version}-source.jar" file="${module.target}/${module.srcjar.filename}" overwrite="true" />
+		<copy tofile="${snapshot.dir}/${module.name}-${module.version}-sources.jar" file="${module.target}/${module.srcjar.filename}" overwrite="true" />
+		<copy tofile="${snapshot.dir}/${module.name}-${module.version}-javadoc.jar" file="${module.target}/${module.docjar.filename}" overwrite="true" />
+		<ivy:deliver pubrevision="${module.version}" status="snapshot" deliverpattern="${snapshot.dir}/ivy.xml" />
+		<ivy:makepom ivyfile="${snapshot.dir}/ivy.xml" pomfile="${snapshot.dir}/${module.name}-${module.version}.pom" />
+		<ivy:publish resolver="share-snapshot" artifactspattern="${snapshot.dir}/[artifact]-[revision](-[type]).[ext]" srcivypattern="${snapshot.dir}/ivy.xml" pubrevision="${module.version}" update="true" overwrite="true" status="snapshot" />
+	</target>
+
+	<target name="publish" depends="jar,source-jar,doc-jar" description="--> publish this project in the ivy repository">
+		<property name="publish.dir" value="${module.target}/publish" />
+		<copy tofile="${publish.dir}/${module.name}-${module.version}-jar.jar" file="${module.target}/${module.jar.filename}" overwrite="true" />
+		<copy tofile="${publish.dir}/${module.name}-${module.version}.jar" file="${module.target}/${module.jar.filename}" overwrite="true" />
+		<copy tofile="${publish.dir}/${module.name}-${module.version}-source.jar" file="${module.target}/${module.srcjar.filename}" overwrite="true" />
+		<copy tofile="${publish.dir}/${module.name}-${module.version}-sources.jar" file="${module.target}/${module.srcjar.filename}" overwrite="true" />
+		<copy tofile="${publish.dir}/${module.name}-${module.version}-javadoc.jar" file="${module.target}/${module.docjar.filename}" overwrite="true" />
+		<ivy:deliver pubrevision="${module.version}" deliverpattern="${publish.dir}/ivy.xml" />
+		<ivy:makepom ivyfile="${publish.dir}/ivy.xml" pomfile="${publish.dir}/${module.name}-${module.version}.pom" />
+		<ivy:publish resolver="share-snapshot" artifactspattern="${publish.dir}/[artifact]-[revision](-[type]).[ext]" srcivypattern="${publish.dir}/ivy.xml" pubrevision="${module.version}" update="true" overwrite="true" status="snapshot" />
+		<ivy:publish resolver="share-iphonele-snapshot" artifactspattern="${publish.dir}/[artifact]-[revision](-[type]).[ext]" srcivypattern="${publish.dir}/ivy.xml" pubrevision="${module.version}" update="true" overwrite="true" status="snapshot" />
+		<ivy:publish resolver="share-release" artifactspattern="${publish.dir}/[artifact]-[revision](-[type]).[ext]" srcivypattern="${publish.dir}/ivy.xml" pubrevision="${module.version}" update="true" overwrite="true" status="release" />
+	</target>
+
+</project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--ant 脚本文件 -->
+
+<project name="toolkit-common-lang" basedir=".">
+
+	<!--设置下面要用到的属性-->
+	<property name="module.name" value="${ant.project.name}" />
+	<property name="module.version" value="1.1.0" />
+
+	<property name="devconf.url" value="http://localhost:8080/devconf/" />
+	<property name="lib.buildfile" value="build-lib.xml" />
+
+	<import  as="impl">
+		<url url="${devconf.url}/${lib.buildfile}"/>
+	</import>
+</project>
