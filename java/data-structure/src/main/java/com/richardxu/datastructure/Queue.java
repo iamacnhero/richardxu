@@ -44,7 +44,8 @@ public class Queue<E> implements Iterable<E> {
      * @return true if this queue is empty; false otherwise
      */
     public boolean isEmpty() {
-        return first == null;
+        // return first == null;
+        return size == 0;
     }
     
     /**

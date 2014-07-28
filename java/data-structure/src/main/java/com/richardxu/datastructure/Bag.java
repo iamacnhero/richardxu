@@ -39,7 +39,8 @@ public class Bag<E> implements Iterable<E> {
      * @return true if this bag is empty; false otherwise
      */
     public boolean isEmpty() {
-        return first == null;
+        // return first == null;
+        return size == 0;
     }
     
     /**
