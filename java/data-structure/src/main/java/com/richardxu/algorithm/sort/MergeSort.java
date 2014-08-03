@@ -12,20 +12,6 @@ public class MergeSort<T extends Comparable<T>> {
     
     private static Comparable[] aux; // 归并所需的辅助数组
     
-    public static void sort(Comparable[] a) {
-        aux = new Comparable[a.length];     // 一次性分配空间
-        sort(a, 0, a.length - 1);
-    }
-    
-    private static <T extends Comparable<T>> void sort(T[] a, int lo, int hi) {
-        // 将数组a[lo..hi]排序
-        if (hi <= lo) return ;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, lo, mid);       // 将左半边排序
-        sort(a, mid+1, hi);     // 将右半边排序
-        merge(a, lo, mid, hi);  // 归并结果
-    }
-    
     // 将a[lo..mid]和a[mid+1..hi]归并
     private static void merge(Comparable[] a, int lo, int mid, int hi) {
         int i = lo, j = mid + 1;
@@ -41,6 +27,20 @@ public class MergeSort<T extends Comparable<T>> {
             else                           a[k] = aux[i++]; // 右半边的当前元素大于等于左半边的当前元素(取左半边的元素)
         }
     }    
+    
+    public static void sort(Comparable[] a) {
+        aux = new Comparable[a.length];     // 一次性分配空间
+        sort(a, 0, a.length - 1);
+    }
+    
+    private static <T extends Comparable<T>> void sort(T[] a, int lo, int hi) {
+        // 将数组a[lo..hi]排序
+        if (hi <= lo) return ;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, lo, mid);       // 将左半边排序
+        sort(a, mid+1, hi);     // 将右半边排序
+        merge(a, lo, mid, hi);  // 归并结果
+    }
     
     private static <T extends Comparable<T>> boolean less(T v, T w) {
         return (v.compareTo(w) > 0);
