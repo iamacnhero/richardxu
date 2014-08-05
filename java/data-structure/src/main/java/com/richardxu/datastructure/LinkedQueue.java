@@ -7,7 +7,7 @@ import com.richardxu.lib.StdIn;
 import com.richardxu.lib.StdOut;
 
 /**
- *  <tt>Queue</tt> 类表示一个先入先出(first-in-first-out, FIFO)的队列
+ *  <tt>Queue</tt> 类表示一个先入先出(first-in-first-out, FIFO)的队列，使用单链表实现。
  *  它支持 <em>入队(enqueue)</em> 和 <em>出队(dequeue)</em>
  *  操作, 同时支持获取首元素(peeking)的操作,
  *  测试队列是否非空, 和按照FIFO顺序迭代数据元素.
@@ -19,47 +19,36 @@ import com.richardxu.lib.StdOut;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class Queue<E> implements Iterable<E> {
-    private int size;       // number of elements on queue
-    private Node<E> first;  // begging of queue
-    private Node<E> last;   // end of queue
+public class LinkedQueue<E> implements Iterable<E> {
+    private int size;       // 队列元素数
+    private Node<E> first;  // 队列首结点
+    private Node<E> last;   // 队列尾结点
 
-    // helper linked list class
     private static class Node<E> {
         private E item;
         private Node<E> next;
     }
     
     /**
-     * Initializes an empty queue.
+     * 初始化一个空队列.
      */
-    public Queue() {
+    public LinkedQueue() {
         first = null;
         last = null;
         size = 0;
     }
     
-    /**
-     * Is this queue empty?
-     * @return true if this queue is empty; false otherwise
-     */
     public boolean isEmpty() {
         // return first == null;
         return size == 0;
     }
     
-    /**
-     * Returns the number of items in this queue.
-     * @return the number of items in this queue.
-     */
     public int size() {
         return size;
     }
     
     /**
-     * Returns the item least recently added to this queue.
-     * @return the item least recently added to this queue
-     * @throws java.util.NoSuchElementException if the queue is empty
+     * 返回最新添加的元素(第一个元素)
      */
     public E peek() {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
@@ -67,8 +56,7 @@ public class Queue<E> implements Iterable<E> {
     }
     
     /**
-     * Adds the item to this queue
-     * @param item the item to add
+     * 入队
      */
     public void enqueue(E item) {
        Node<E> oldlast = last;
@@ -83,9 +71,7 @@ public class Queue<E> implements Iterable<E> {
     }
     
     /**
-     * Removes and returns the item on this queue that was least recently added.
-     * @return the item on this queue that was least recently added
-     * @throws java.util.NoSuchElementException if this queue is empty
+     * 出队
      */
     public E dequeue() {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
@@ -96,9 +82,6 @@ public class Queue<E> implements Iterable<E> {
         return item;
     }
     
-    /**
-     * @return the sequence of items in FIFO order, separated by spaces
-     */
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (E item : this) {
@@ -107,14 +90,10 @@ public class Queue<E> implements Iterable<E> {
         return s.toString();
     }
     
-    /* Returns an iterator that iterates over the items in this queue in FIFO order.
-     * @return an iterator that iterates over the items in this queue in FIFO order
-     */
     public Iterator<E> iterator() {
         return new ListIterator<E>(first);
     }
     
-    // an iterator, doesn't implement remove() since it's optional
     private class ListIterator<Item> implements Iterator<Item> {
         private Node<Item> current;
         
@@ -133,11 +112,8 @@ public class Queue<E> implements Iterable<E> {
         }
     }
     
-    /**
-     * Unit tests the <tt>Queue</tt> data type.
-     */
     public static void main(String[] args) {
-        Queue<String> q = new Queue<String>();
+        LinkedQueue<String> q = new LinkedQueue<String>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
             if (!item.equals("-")) 

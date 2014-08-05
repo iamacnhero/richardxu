@@ -11,48 +11,33 @@ import com.richardxu.lib.StdOut;
  *  <p>
  *  <em>add</em>, <em>isEmpty</em>, 和 <em>size</em> 操作的耗时都是常数级.
  *  迭代花费的时间与元素数目成正比例关系.
+ *  底层使用单链表实现
  *  <p>
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
  */
 public class Bag<E> implements Iterable<E> {
     private int size;              // number of elements in bag
     private Node<E> first;   // beginning of bag
     
-    // helper linked list class
     private static class Node<E> {
         private E item;
         private Node<E> next;
     }
     
-    /**
-     * Initializes an empty bag.
-     */
     public Bag() {
-        first = null;   // 初始元素为空, 接收到新元素后, 不停替换为新元素, 老元素后移
+        first = null;   // 初始元素为空, 接收到新元素后, 放置在链表头部, 老元素后移
         size = 0;
     }
     
-    /**
-     * Is this bag empty?
-     * @return true if this bag is empty; false otherwise
-     */
     public boolean isEmpty() {
         // return first == null;
         return size == 0;
     }
     
-    /**
-     * Returns the number of items in this bag.
-     * @return the number of items in this bag.
-     */
     public int size() {
         return size;
     }
     
     /**
-     * Adds the item to this bag.
      * Bag 接收到新元素后, 不停替换first为新元素, 原来first指向的老元素不断后移
      * @param item the item to add to this bag
      */
@@ -65,14 +50,10 @@ public class Bag<E> implements Iterable<E> {
     }
 
     
-    /* Returns an iterator that iterates over the items in the bag in arbitrary order.
-     * @return an iterator that iterates over the items in the bag in arbitrary order.
-     */
     public Iterator<E> iterator() {
         return new ListIterator<E>(first);
     }
     
-    // an iterator, doesn't implement remove() since it's optional
     private class ListIterator<Item> implements Iterator<Item> {
         private Node<Item> current;
         
