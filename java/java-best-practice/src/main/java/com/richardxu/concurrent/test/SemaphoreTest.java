@@ -1,4 +1,4 @@
-package com.richardxu.concurrent;
+package com.richardxu.concurrent.test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

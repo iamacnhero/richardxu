@@ -1,4 +1,4 @@
-package com.richardxu.concurrent;
+package com.richardxu.concurrent.test;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
