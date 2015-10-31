@@ -14,6 +14,8 @@ import java.net.Socket;
 
 /**
  * 基于线程池的简单Web Server
+ * SimpleHttpServer在建立了与客户端的连接之后，并不会处理客户端的请求，而是将其包装成HttpRequestHandler并交由线程池处理。
+ * 在线程池中的Worker处理客户端请求的同时，SimpleHttpServer能够继续完成后续客户端连接的建立，不会阻塞后续客户端的请求。
  * 
  * @author <a href="463692574@qq.com">Richard Xu</a>
  * @version 1.0
