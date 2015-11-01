@@ -5,8 +5,15 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * 独占锁Mutex是一个自定义同步组件, 它在同一时刻只允许一个线程占有锁
+ * 
+ * @author <a href="463692574@qq.com">Richard Xu</a>
+ * @version 1.0
+ * @since 2015年11月1日
+ */
 public class Mutex implements Lock {
-	// 静态内部类，自定义同步器
+	// 定义静态内部类，自定义同步器，继承了同步器并实现了独占式获取和释放同步状态
 	private static class Sync extends AbstractQueuedSynchronizer {
 		private static final long serialVersionUID = 1L;
 		// 是否处于占用状态
@@ -75,5 +82,5 @@ public class Mutex implements Lock {
 	public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
 		return sync.tryAcquireNanos(1, unit.toNanos(time));
 	}
-
+	
 }
