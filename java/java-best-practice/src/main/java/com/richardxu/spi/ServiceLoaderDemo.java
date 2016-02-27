@@ -9,7 +9,7 @@ import java.util.ServiceLoader;
  * @version 1.0
  * @since 2016年2月27日
  */
-public class ServiceLoadDemo {
+public class ServiceLoaderDemo {
 	
 	public static void main(String[] args) {
 		ServiceLoader<DBConn> dbConns = ServiceLoader.load(DBConn.class);
