@@ -33,7 +33,7 @@ public class AppConfig {
 		Properties p = new Properties();
 		InputStream input = null;
 		try {
-			input = AppConfig.class.getResourceAsStream("/appConfig.properties");
+			input = AppConfig.class.getResourceAsStream("/org/appConfig.properties");
 			p.load(input);
 			this.parameterA = p.getProperty("paramA");
 			this.parameterB = p.getProperty("paramB");
