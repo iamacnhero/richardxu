@@ -6,12 +6,16 @@ public class PersonalOrder implements OrderApi, Cloneable {
 	private String productId;
 	private int orderProductNum = 0;
 	
+	private Product product = null;
+	
 	@Override
 	public Object clone() {
 		// 克隆方法的真正实现，直接调用父类的克隆方法就可以了
-		Object obj = null;
+		PersonalOrder obj = null;
 		try {
-			obj = super.clone();
+			obj = (PersonalOrder) super.clone();
+			// 下面这句话不可缺少
+			obj.setProduct((Product) this.product.clone());
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -45,6 +49,14 @@ public class PersonalOrder implements OrderApi, Cloneable {
 
 	public void setOrderProductNum(int orderProductNum) {
 		this.orderProductNum = orderProductNum;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 }
