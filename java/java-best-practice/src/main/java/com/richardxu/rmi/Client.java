@@ -15,7 +15,9 @@ import java.rmi.registry.Registry;
 public class Client {
 	public static void main(String[] args) throws RemoteException, NotBoundException {
 		// RMI客户端首先通过 LocateRegistry.getRegistry 来获取Registry对象
-		Registry registry = LocateRegistry.getRegistry("localhost");
+		String host = "30.9.40.79";
+		int port = 1099;
+		Registry registry = LocateRegistry.getRegistry(host, port);
 		
 		String name = "BusinessDemo";
 		// 创建 BusinessDemo 类的代理类，当调用时则调用 localhost:1099 上名称为 BusinessDemo 的对象,
