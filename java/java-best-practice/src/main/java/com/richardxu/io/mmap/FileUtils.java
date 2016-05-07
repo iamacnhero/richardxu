@@ -27,30 +27,29 @@ public class FileUtils {
 		bos.close();
 	}
 	
-//	public static void main(String[] args) throws IOException {
-//		StringBuilder sb = new StringBuilder();
-//		for (int i = 0; i < 1000; i++) {
-//			sb.append(i);
-//		}
-//		
-//		byte[] data = sb.toString().getBytes();
-//		System.out.println(data.length/1024);
-//		String fileName = "largeFile.dat";
-//		
-//		long start = System.currentTimeMillis();
-//		for (int i = 0; i < 100; i++) {
-//			writeFile(fileName, data);
-//		}
-//		long cost = System.currentTimeMillis() - start;
-//		System.out.println("write consume: " + cost + "ms");
-//		
-//		start = System.currentTimeMillis();
-//		for (int i = 0; i < 100; i++) {
-//			writeFileWithMmap(fileName, data);
-//		}
-//		cost = System.currentTimeMillis() - start;
-//		System.out.println("write with mmap consume: " + cost + "ms");
-//	}
+	public static void main(String[] args) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 1000; i++) {
+			sb.append(i);
+		}
+		
+		byte[] data = sb.toString().getBytes();
+		String fileName = "largeFile.dat";
+		
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < 100; i++) {
+			writeFile(fileName, data);
+		}
+		long cost = System.currentTimeMillis() - start;
+		System.out.println("write consume: " + cost + "ms");
+		
+		start = System.currentTimeMillis();
+		for (int i = 0; i < 100; i++) {
+			writeFileWithMmap(fileName, data);
+		}
+		cost = System.currentTimeMillis() - start;
+		System.out.println("write with mmap consume: " + cost + "ms");
+	}
 	
 //	public static void readFileWithMmap(String fileName) throws IOException {
 //        FileChannel fileChannel = new RandomAccessFile(fileName, "r").getChannel();
