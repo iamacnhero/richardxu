@@ -9,3 +9,4 @@ Guarded Suspension 意为保护暂停，其核心思想是仅当服务进程准�
  - ClientThread对象：负责不断发起请求，并将请求对象放入请求队列
  - ServerThread对象：根据自身状态，在有能力处理请求时，从RequestQueue中提取请求对象加以处理。
 
+结合Future模式，可以对Guarded Suspension模式进行扩展，构造一个可以携带返回值的Guarded Suspension。
