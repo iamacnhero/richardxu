@@ -6,31 +6,29 @@ import java.util.concurrent.Future;
 import java.util.concurrent.RecursiveTask;
 
 /**
- * 使用Fork/Join框架计算 1~99立方和 的结果
- * 子任务是计算两个数相加(阈值是2)，再join子任务的结果
- * RecursiveTask是有返回结果的任务
+ * 使用Fork/Join框架计算 1~99立方和 的结果 子任务是计算两个数相加(阈值是2)，再join子任务的结果 RecursiveTask是有返回结果的任务
  * 
  * @author <a href="463692574@qq.com">Richard Xu</a>
  * @version 1.0
  * @since 2015年11月2日
  */
 public class CountTask extends RecursiveTask<Integer> {
-	
+
 	private static final long serialVersionUID = 7147353340597656973L;
 
 	private static final int THRESHOLD = 2;			// 阈值
 	private int start;
 	private int end;
-	
+
 	public CountTask(int start, int end) {
 		this.start = start;
 		this.end = end;
 	}
-	
+
 	@Override
 	protected Integer compute() {
 		int sum = 0;
-		
+
 		// 如果任务足够小就计算任务
 		boolean canCompute = (end - start) <= THRESHOLD;
 		if (canCompute) {
@@ -38,7 +36,7 @@ public class CountTask extends RecursiveTask<Integer> {
 				sum += Math.pow(i, 3);
 			}
 		} else {
-			// 如果任务大于阈值，就分裂成两个子任务计算 
+			// 如果任务大于阈值，就分裂成两个子任务计算
 			int middle = (start + end) / 2;
 			CountTask leftTask = new CountTask(start, middle);
 			CountTask rightTask = new CountTask(middle + 1, end);
@@ -53,7 +51,7 @@ public class CountTask extends RecursiveTask<Integer> {
 		}
 		return sum;
 	}
-	
+
 	public static void main(String[] args) {
 		ForkJoinPool forkJoinPool = new ForkJoinPool();
 		// 生成一个计算任务，负责计算 1到99的立方之和
@@ -63,7 +61,9 @@ public class CountTask extends RecursiveTask<Integer> {
 		try {
 			System.out.println(result.get());
 		} catch (InterruptedException e) {
+			// 
 		} catch (ExecutionException e) {
+			// 
 		}
 	}
 
