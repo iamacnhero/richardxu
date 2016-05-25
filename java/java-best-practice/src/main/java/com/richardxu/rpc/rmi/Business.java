@@ -1,4 +1,4 @@
-package com.richardxu.rmi;
+package com.richardxu.rpc.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

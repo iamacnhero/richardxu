@@ -1,4 +1,4 @@
-package com.richardxu.rmi;
+package com.richardxu.rpc.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
