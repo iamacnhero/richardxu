@@ -11,6 +11,12 @@
 	
 	<dependencies>
 
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.0.19.Final</version>
+		</dependency>
+
 		<!-- 实现将一个普通的 Java 应用变成系统的一个后台服务 -->
 		<dependency>
 			<groupId>commons-daemon</groupId>
