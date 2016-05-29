@@ -1,7 +1,12 @@
 package com.richardxu.gof.proxy;
 
-public class UserModel implements UserModelApi {
-	private String userId;
+import java.io.Serializable;
+
+public class UserModel implements UserModelApi, Serializable {
+    
+    private static final long serialVersionUID = 1225433623062573203L;
+    
+    private String userId;
 	private String name;
 	private String deptId;
 	private String gender;
