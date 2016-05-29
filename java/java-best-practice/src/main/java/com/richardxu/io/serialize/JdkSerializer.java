@@ -3,9 +3,10 @@ package com.richardxu.io.serialize;
 import java.io.*;
 
 /**
- * jdk默认的序列化
- *
- * @author peiyu
+ * JDK默认的序列化
+ * @author <a href="mailto:463692574@qq.com">许峰</a>
+ * @version 1.0
+ * @since 2016年5月29日
  */
 public class JdkSerializer implements Serializer {
 
