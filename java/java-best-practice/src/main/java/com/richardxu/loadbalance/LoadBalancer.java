@@ -8,6 +8,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * @author <a href="mailto:463692574@qq.com">许峰</a>
+ * @version 1.0
+ * @since 2016年6月1日
+ */
 public class LoadBalancer {
     private Map<String, Integer> serverWeightMap = new HashMap<String, Integer>();
     {
