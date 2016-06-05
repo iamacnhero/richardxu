@@ -28,6 +28,7 @@ public class LoggingInvocationHandler implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		logger.log(Level.INFO, "调用方法 " + method.getName() + ", 参数为：" + Arrays.deepToString(args));
+		System.out.println("调用方法 " + method.getName() + ", 参数为：" + Arrays.deepToString(args));
 		return method.invoke(receiverObject, args);
 	}
 
