@@ -1,7 +1,5 @@
 package com.richardxu.javadaemon;
 
-import java.util.Iterator;
-
 public class Api {
 	public static String findSlowMethodsBySession(String sessionId, int delay, int slowerThan) {
 		long startTime = System.currentTimeMillis();
