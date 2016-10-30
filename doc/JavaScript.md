@@ -182,3 +182,90 @@ console.log(status);            // A-OK
 // 注意该函数内部定义的变量 sum 不会与函数外部定义的 sum 产生冲突
 
 ```
+
+### 返回 Return
+一个函数总是会返回一个值。如果没有指定返回值，则返回 undefined
+
+### 异常 Exceptions
+```javascript
+function add(a, b) {
+  if (typeof a !== 'number' || typeof b != 'number') {
+    throw {
+      name: 'TypeError',
+      message: 'add needs numbers'
+    };
+  }
+  return a + b;
+}
+```
+该 exception 对象将被传递到一个 try 语句的 catch 从句：
+```javascript
+// 以不正确的方式调用之前的 add 函数
+try {
+  add("seven");  
+} catch (e) {
+  document.writeln(e.name + ': ' + e.message);
+}
+```
+
+### 扩充类型的功能 Augmenting Types
+JavaScript 允许给语言的基本类型扩充功能。前面，我们看到通过给 Object.prototype 添加方法，可以让该方法对所有对象都可用。这样的方式对函数、数组、字符串、数字、正则表达式和布尔值都适用。
+```javascript
+// 通过给 Function.prototype 增加方法，使得该方法对所有函数可用
+// 下次给对象增加方法的时候就不必键入 prototype 这几个字符，省掉了一点麻烦
+Function.prototype.method = function(name, func) {
+  if (!this.prototype[name]) {      // 基本类型的原型是公用结构，保险的做法是在确定没有该方法时才添加它
+    this.prototype[name] = func;
+  }
+  return this;
+}
+
+// 通过给 Number.prototype 增加一个 integer 方法，提取数字中的整数部分
+Number.method('integer', function() {
+  // 根据数字的正负来判断是使用 Math.ceiling 还是 Math.floor 
+  return Math[this < 0 ? 'ceil' : 'floor'](this);
+});
+
+// 给字符串添加一个移除首尾空白的方法
+String.method('trim', function() {
+  return this.replace(/^\s+|\s+$/g, '');
+});
+
+document.writeln('"' + "   our country  ".trim() + '"');
+```
+
+注意， for in 语句用在原型上表现很差。可以使用 hasOwnProperty 方法筛选出继承而来的属性，或者可以查找特定的类型。
+
+### 递归 Recursion
+```javascript
+// 汉诺塔
+var hanoi = function(disc, src, aux, dst) {
+  if (disc > 0) {
+    hanoi(disc - 1, src, dst, aux);
+    document.writeln('Move disc ' + disc + ' from ' + src + ' to ' + dst);
+    hanoi(disc - 1, aux, src, dst);
+  }
+};
+
+hanoi(3, 'Src', 'Aux', "Dst");
+```
+
+### 作用域
+JavaScript 并不支持块级作用域。 JavaScript 有函数作用域，即定义在函数中的参数和变量在函数外部是不可见的，而在一个函数内部任何位置定义的变量，在该函数内部任何地方都可见。
+```javascript
+var foo = function() {
+  var a = 3, b = 5;
+  var bar = function() {
+    var b = 7, c = 11;
+    // 此时 a = 3, b = 7, c = 11
+    a += b + 3;
+    // 此时 a = 21, b = 7, c = 11
+  };
+  // 此时 a = 3, b = 5, 而 c 还没有定义
+  bar();
+  // 此时 a = 21, b = 5
+}
+```
+
+### 闭包 Closure
+作用域的好处是内部函数可以访问定义它们的外部函数的参数和变量（除了 this 和 arguments ）。
