@@ -57,3 +57,38 @@ System.out.println(birthday);
 LocalDate programmerDay = LocalDate.of(2014, 1, 1).plusDays(255);
 ```
 
+### 本地时间
+LocalTime 表示一天中的某个时间，如 15:30:00。可以使用now或者of方法来创建一个LocalTime实例：
+```javascript
+LocalTime rightNow = LocalTime.now();
+LocalTime bedtime = LocalTime.of(22, 30);
+LocalTime wakeup = bedtime.plusHours(8);            // 6点半醒来
+
+// LocalDateTime 类表示一个日期和时间。该类适合用来存储确定时区中的某个时间点。
+LocalDateTime now = LocalDateTime.now();
+System.out.println(now);
+```
+
+### 格式化和解析
+DateTimeFormatter 类提供了三种格式化方法来打印日期/时间：
+ - 预定义的标准格式
+ - 语言环境相关的格式
+ - 自定义的格式
+
+ ```javascript
+ LocalDateTime now = LocalDateTime.now();
+DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);
+String formatted = formatter.format(now);
+System.out.println(formatted);          // 2016年11月2日 上午02时38分37秒
+
+formatter = DateTimeFormatter.ofPattern("E yyyy-MM-dd HH:mm");
+formatted = formatter.format(now);
+System.out.println(formatted);          // 星期三 2016-11-02 02:38
+ ```
+ 
+ ### 与遗留代码互操作
+ Instant 类似于java.util.Date类。Java8中，java.util.Date增加了两个方法：toInstant方法用来将一个Date对象转换为一个Instant对象，
+ 而format正好相反。
+ 
+ ZonedDateTime类似于java.util.GregorianCalendar类。
+ 
