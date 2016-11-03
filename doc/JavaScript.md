@@ -269,3 +269,100 @@ var foo = function() {
 
 ### 闭包 Closure
 作用域的好处是内部函数可以访问定义它们的外部函数的参数和变量（除了 this 和 arguments ）。
+
+### 模块
+可以使用函数和闭包来构造模块。模块是一个提供接口却隐藏状态与实现的函数或对旬。如给String增加一个 deentityify 方法，作用是寻找字符串中的HTML字符实体并把它们替换为对应的字符：
+```javascript
+String.method('deentityify', function() {
+  var entity = {      // 字符实体表
+    quot: '"',
+    lt: '<',
+    gt: '>'
+  };
+
+  // 返回 deentityify 方法
+  return function() {
+    // 这才是 deentityify 方法，它调用字符串的 replace 方法
+    return this.replace(/&([^&;]+);/g, function(a, b) {
+      var r = entity[b];
+      return typeof r === 'string' ? r : a;
+    });
+  }
+}());     // 注意最后一行的()运算符立刻调用我们刚刚构造出来的函数。
+
+document.writeln('&lt;&quot;&gt;'.deentityify());
+```
+模块模式的一般形式是：一个定义了私有变量和函数的函数；利用闭包创建可以访问私有变量和函数的特权函数；最后返回这个特权函数，或者把它们保存到一个可访问到的地方。
+```javascript
+var serial_maker = function() {
+  // 返回一个用来产生唯一字符串的对象
+  // 唯一对象由两部分组成：前缀 + 序列号
+  // 该对象包含一个设置前缀的方法，一个设置序列号的方法，和一个产生唯一字符串的 gensym 方法
+  var prefix = '';
+  var seq = 0;
+  return {
+    set_prefix: function(p) {
+      prefix = String(p);
+    },
+    set_seq: function(s) {
+      seq = s;
+    },
+    gensym: function() {
+      var result = prefix + seq;
+      seq += 1;
+      return result;
+    }
+  };
+};
+var seqer = serial_maker();
+seqer.set_prefix('Q');
+seqer.set_seq(1000);
+for(var i = 0; i < 10; i++) {
+  document.writeln(seqer.gensym());
+}
+```
+
+## 数组 Arrays
+### 数组字面量 Array Literals
+一个数组字面量是在一对方括号中包围零个或多个用逗号分隔的值的表达式。数组的第一个值将获得属性名'0'，第二个值将获得属性名'1'，依此类推。
+```javascript
+var empty = [];
+var numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+console.log(empty.length);          // 0
+console.log(numbers.length);        // 10
+
+// 对象字面量
+var numbers_object = {
+  0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine'
+};
+```
+
+### 长度
+每个数组都有一个 length 属性。和其他语言不同， JavaScript 数组的 length 是没有上界的。如果你用大于或等于当前 length 的数字作为下标来存储一个元素，那么 length 值会被增大以容纳新元素，不会发生数组越界错误。
+
+通过把下标定为一个数组的当前 length ，可以附加一个新元素到该数组的尾部，有时用 push 方法可以更方便地完成同样的事情：
+```javascript
+var numbers = ['zero', 'one', 'two', 'three', 'four'];
+numbers[numbers.length] = ['five'];
+document.writeln(numbers);        // zero,one,two,three,four,five
+numbers.push('six');
+document.writeln(numbers);        // zero,one,two,three,four,five,six
+```
+
+JavaScript 没有一个好的机制来区别数组和对象，但我们可以自定义 is_array 函数来弥补这个缺陷：
+```javascript
+var numbers_object = {
+  0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine'
+};
+var numbers = ['zero', 'one', 'two', 'three', 'four'];
+
+var is_array = function(value) {
+  return Object.prototype.toString.apply(value) === '[object Array]'; 
+};
+
+document.writeln(is_array(numbers));          // true
+document.writeln(is_array(numbers_object));   // false
+```
+
+
+## 正则表达式 Regular Expressions
