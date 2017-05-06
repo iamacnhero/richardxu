@@ -1,5 +1,6 @@
 package com.richardxu.annotation;
 
+
 import java.util.concurrent.TimeUnit;
 
 @PerformanceLog
