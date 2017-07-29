@@ -4,7 +4,7 @@ public class China implements Country {
 
 	@Override
 	public Person createPerson() {
-		return new American();
+		return new Chinese();
 	}
 
 	@Override

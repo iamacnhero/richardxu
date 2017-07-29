@@ -9,7 +9,7 @@ package com.richardxu.gof.abstract_factory;
  */
 public class Client {
 	public static void main(String[] args) {
-		Country country = new America();
+		Country country = new China();
 		Person person = country.createPerson();
 		Language language = country.createLanguage();
 		String words = language.getWords();
